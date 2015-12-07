@@ -43,8 +43,6 @@ int			parse(t_sys *sys, int argc, char **argv)
 int			fillMap(t_sys *sys, char *str, int len)
 {
 	int		i;
-	int		j;
-	int		k;
 	int		offset;
 
 	sys->nb_tetri = getNbTetri(len);
@@ -86,8 +84,8 @@ int			setTetri(t_sys *sys, char *str, int cur)
 			j = 0;
 			while (j < 4)
 			{
-				sysCub->lst[0].verif[j] = TRUE;
-				if (!backVerif(&sysCub, i, j))
+				sysCub.lst[0].verif[j] = TRUE;
+				if (!backVerif(&sysCub, i, j, str))
 				{
 					buildTetri(sys, &sysCub, str, cur);
 					return (0);
@@ -96,7 +94,9 @@ int			setTetri(t_sys *sys, char *str, int cur)
 			}
 			return (1);
 		}
+		i++;
 	}
+	return (1);
 }
 
 void		buildTetri(t_sys *sys, t_sysCub *sysCub, char *str, int cur)
@@ -131,12 +131,11 @@ int			ft_max(int a, int b)
 	return (b);
 }
 
-int			getStart(t_Cub *lst)
+int			getStart(t_cub *lst)
 {
 	int		tmp;
 	int		start;
 	int		i;
-	int		ret;
 
 	tmp = lst[0].x_r;
 	start = 0;
@@ -155,14 +154,14 @@ int			getStart(t_Cub *lst)
 	return (lst[start].posi - (lst[start].y_r * 5));
 }
 
-int			backVerif(t_sysCub *sysCub, int pos, int dir)
+int			backVerif(t_sysCub *sysCub, int pos, int dir, char *str)
 {
 	int		j;
 	int		i;
 	int		ret;
 	int		posi;
 
-	posi = getPosi(int pos, dir);
+	posi = getPosi(pos, dir);
 	if (str[posi] != '#')
 		return (1);
 	j = 0;
@@ -171,6 +170,7 @@ int			backVerif(t_sysCub *sysCub, int pos, int dir)
 	{
 		if (sysCub->lst[j].posi == posi)
 			ret = j;
+		j++;
 	}
 	if (ret < 0)
 	{
@@ -206,7 +206,7 @@ int			backVerif(t_sysCub *sysCub, int pos, int dir)
 		if (sysCub->lst[ret].verif[i] == FALSE)
 		{
 			sysCub->lst[ret].verif[i] = TRUE;
-			if (!backVerif(sysCub, posi, i))
+			if (!backVerif(sysCub, posi, i, str))
 				return (0);
 		}
 		i++;

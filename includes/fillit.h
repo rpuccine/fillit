@@ -11,9 +11,10 @@
 /* ************************************************************************** */
 
 #ifndef FILLIT_H
-# define FILLIT_h
+# define FILLIT_H
 
 # include "libft.h"
+# include <fcntl.h>
 
 # define BUFF_SIZE 1023
 # define TRUE 1
@@ -26,14 +27,14 @@ typedef struct			s_cub
 	int					x_r;
 	int					y_r;
 	int					posi;
-	t_ch[4]				verif;
+	t_ch				verif[4];
 }						t_cub;
 
 typedef struct			s_sysCub
 {
 	int					cur;
-	t_ch[3]				nbVerif;
-	t_cub[4]			lst;
+	t_ch				nbVerif[3];
+	t_cub				lst[4];
 }						t_sysCub;
 
 typedef struct			s_tetri
@@ -58,8 +59,8 @@ int						fillMap(t_sys *sys, char *str, int len);
 int						setTetri(t_sys *sys, char *str, int cur);
 void					buildTetri(t_sys *sys, t_sysCub *sysCub, char *str, int cur);
 int						ft_max(int a, int b);
-int						getStart(t_Cub *lst);
-int						backVerif(t_sysCub *sysCub, int pos, int dir);
+int						getStart(t_cub *lst);
+int						backVerif(t_sysCub *sysCub, int pos, int dir, char *str);
 int						getPosi(int pos, int dir);
 int						verifChar(char *file);
 int						getNbTetri(int len);
