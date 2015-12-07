@@ -16,6 +16,8 @@
 # include "libft.h"
 
 # define BUFF_SIZE 1023
+# define TRUE 1
+# define FALSE 0
 
 typedef unsigned char	t_ch;
 

@@ -44,6 +44,7 @@ int			fillMap(t_sys *sys, char *str, int len)
 {
 	int		i;
 	int		j;
+	int		k;
 	int		offset;
 
 	sys->nb_tetri = getNbTetri(len);
@@ -54,12 +55,52 @@ int			fillMap(t_sys *sys, char *str, int len)
 	i = 0;
 	while (i < sys->nb_tetri)
 	{
-		j = offset;
-		while (j < offset + 20)
+		if (verifChar(str + offset))
+			return (1);
+		if (setTetri(sys, str + offset, i))
+			return (1);
+		offset += 20;
+		if (i < sys->nb_tetri - 1)
 		{
-			if (str[j])
+			if (str[offset] != '\n')
+				return (1);
 		}
+		offset++;
+		i++;
 	}
+	return (0);
+}
+
+int			setTetri(t_sys *sys, char *str, int cur)
+{
+
+}
+
+int			verifChar(char *file)
+{
+	int		i;
+	int		j;
+	int		cub;
+
+	i = 0;
+	cub = 0;
+	while (i < 4)
+	{
+		j = 0;
+		while (j < 4)
+		{
+			if (file[i * 5 + j] != '.' && file[i * 5 + j] != '#')
+				return (1);
+			if (file[i * 5 + j] == '#')
+				cub++;
+			j++;
+		}
+		if (file[i * 5 + j] != '\n')
+			return (1);
+		i++;
+	}
+	if (cub != 4)
+		return (1);
 	return (0);
 }
 
