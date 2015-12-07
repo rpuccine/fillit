@@ -21,6 +21,6 @@ int		main(int argc, char **argv)
 		error();
 		return (0);
 	}
-
+	printAllPiece(&sys);
 	return 0;
 }
