@@ -166,6 +166,7 @@ int			backVerif(t_sysCub *sysCub, int pos, int dir, char *str)
 	posi = getPosi(pos, dir);
 	if (str[posi] != '#')
 		return (1);
+	sysCub->nbVerif[dir]++;
 	j = 0;
 	ret = -1;
 	while (j <= sysCub->cur)
@@ -176,29 +177,30 @@ int			backVerif(t_sysCub *sysCub, int pos, int dir, char *str)
 	}
 	if (ret < 0)
 	{
-		sysCub->cur++;
+		/*sysCub->cur++;
 		ret = sysCub->cur;
 		sysCub->lst[ret].posi = posi;
 		if (dir == 0)
 		{
 			sysCub->lst[ret].x_r = sysCub->lst[ret - 1].x_r + 1;
 			sysCub->lst[ret].y_r = sysCub->lst[ret - 1].y_r;
-			sysCub->nbVerif[0]++;
 		}
 		else if (dir == 1)
 		{
 			sysCub->lst[ret].x_r = sysCub->lst[ret - 1].x_r;
 			sysCub->lst[ret].y_r = sysCub->lst[ret - 1].y_r + 1;
-			sysCub->nbVerif[1]++;
 		}
 		else if (dir == 2)
 		{
 			sysCub->lst[ret].x_r = sysCub->lst[ret - 1].x_r - 1;
 			sysCub->lst[ret].y_r = sysCub->lst[ret - 1].y_r;
-			sysCub->nbVerif[2]++;
 		}
 		else
-			return (1);
+			return (1);*/
+		sysCub->cur++;
+		sysCub->lst[sysCub->cur].posi = posi;
+		initCubData(sysCub, dir, pos);
+		ret = sysCub->cur;
 	}
 	if (sysCub->cur == 3)
 		return (0);
@@ -214,6 +216,44 @@ int			backVerif(t_sysCub *sysCub, int pos, int dir, char *str)
 		i++;
 	}
 	return (1);
+}
+
+void		initCubData(t_sysCub *sysCub, int dir, int posPrev)
+{
+	int		cur;
+	int		prev;
+
+	cur = sysCub->cur;
+	prev = getCubIndexByPosi(sysCub, posPrev);
+	if (dir == 0)
+	{
+		sysCub->lst[cur].x_r = sysCub->lst[prev].x_r + 1;
+		sysCub->lst[cur].y_r = sysCub->lst[prev].y_r;
+	}
+	else if (dir == 1)
+	{
+		sysCub->lst[cur].x_r = sysCub->lst[prev].x_r;
+		sysCub->lst[cur].y_r = sysCub->lst[prev].y_r + 1;
+	}
+	else if (dir == 2)
+	{
+		sysCub->lst[cur].x_r = sysCub->lst[prev].x_r - 1;
+		sysCub->lst[cur].y_r = sysCub->lst[prev].y_r;
+	}
+}
+
+int			getCubIndexByPosi(t_sysCub *sysCub, int posi)
+{
+	int		i;
+
+	i = 0;
+	while (i < sysCub->cur)
+	{
+		if (sysCub->lst[i].posi == posi)
+			return (i);
+		i++;
+	}
+	return (-1);
 }
 
 int			getPosi(int pos, int dir)
