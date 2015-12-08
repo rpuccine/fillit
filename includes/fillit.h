@@ -15,6 +15,7 @@
 
 # include "libft.h"
 # include <fcntl.h>
+# include <stdio.h>
 
 # define BUFF_SIZE 1023
 # define TRUE 1

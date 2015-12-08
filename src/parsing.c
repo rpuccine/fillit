@@ -82,6 +82,7 @@ int			setTetri(t_sys *sys, char *str, int cur)
 		if (str[i] == '#')
 		{
 			j = 0;
+			sysCub.lst[0].posi = i;
 			while (j < 4)
 			{
 				sysCub.lst[0].verif[j] = TRUE;
@@ -107,9 +108,10 @@ void		buildTetri(t_sys *sys, t_sysCub *sysCub, char *str, int cur)
 	t_tetri	*t;
 
 	t = sys->lst_tetri + cur;
-	t->x = ft_max(sysCub->nbVerif[0], sysCub->nbVerif[2]);
-	t->y = sysCub->nbVerif[1];
+	t->x = ft_max(sysCub->nbVerif[0], sysCub->nbVerif[2]) + 1;
+	t->y = sysCub->nbVerif[1] + 1;
 	start = getStart(sysCub->lst);
+	printf("Start = %d\n", start);
 	t->in = (t_ch *)malloc(sizeof(t_ch) * (t->x * t->y));
 	i = 0;
 	while (i < t->y)
