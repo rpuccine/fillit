@@ -46,6 +46,7 @@ int			fill_map(t_sys *sys, char *str, int len)
 	int		offset;
 
 	sys->nb_tetri = get_nb_tetri(len);
+	sys->area = 0;
 	if (!(sys->lst_tetri =
 		(t_tetri *)malloc(sizeof(t_tetri) * sys->nb_tetri)))
 		return (1);
@@ -110,8 +111,8 @@ void		build_tetri(t_sys *sys, t_sys_cub *sys_cub, char *str, int cur)
 	t = sys->lst_tetri + cur;
 	t->x = ft_max(sys_cub->nb_verif[0], sys_cub->nb_verif[2]) + 1;
 	t->y = sys_cub->nb_verif[1] + 1;
+	sys->area += (t->x * t->y);
 	start = get_start(sys_cub->lst);
-	printf("Start = %d\n", start);
 	t->in = (t_ch *)malloc(sizeof(t_ch) * (t->x * t->y));
 	i = 0;
 	while (i < t->y)

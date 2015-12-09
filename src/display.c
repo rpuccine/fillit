@@ -22,6 +22,8 @@ void	print_all_piece(t_sys *sys)
 	int	i;
 
 	printf("Nb piece : %d\n", sys->nb_tetri);
+	printf("Area : %d\n", sys->area);
+	printf("Min_Sqr : %d\n", sys->min_sqr);
 	i = 0;
 	while (i < sys->nb_tetri)
 	{

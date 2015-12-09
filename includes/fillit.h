@@ -25,7 +25,7 @@
 # define TMP 1
 
 typedef unsigned char	t_ch;
-typedef unsigned char	**t_map;
+//typedef unsigned char	**t_map;
 
 typedef struct			s_cub
 {
@@ -53,8 +53,10 @@ typedef struct			s_tetri
 typedef struct			s_sys
 {
 	int					nb_tetri;
+	int					area;
+	int					min_sqr;
 	t_tetri				*lst_tetri;
-	t_map				map;
+	t_ch				**map;
 
 }						t_sys;
 
@@ -92,13 +94,14 @@ void					print_piece(t_tetri *t);
 ** solve.c
 */
 
-void    place(unsigned char **map, t_tetri *piece, int x, int y);
-int   do_recursion(t_sys *sys, t_square *sqr);
+void    				place(unsigned char **map, t_tetri *piece, int x, int y);
+int   					do_recursion(t_sys *sys, t_square *sqr);
 
 /*
 ** map.c
 */
-void init_map(t_sys *sys);
-void print_map(t_sys *sys);
+void 					init_map(t_sys *sys);
+void 					print_map(t_sys *sys);
+void   					set_min_sqr(t_sys *sys);
 
 #endif
