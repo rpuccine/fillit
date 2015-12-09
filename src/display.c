@@ -17,7 +17,7 @@ void	error(void)
 	ft_putendl("error");
 }
 
-void	printAllPiece(t_sys *sys)
+void	print_all_piece(t_sys *sys)
 {
 	int	i;
 
@@ -25,12 +25,12 @@ void	printAllPiece(t_sys *sys)
 	i = 0;
 	while (i < sys->nb_tetri)
 	{
-		printPiece(sys->lst_tetri + i);
+		print_piece(sys->lst_tetri + i);
 		i++;
 	}
 }
 
-void	printPiece(t_tetri *t)
+void	print_piece(t_tetri *t)
 {
 	int	i;
 	int	j;

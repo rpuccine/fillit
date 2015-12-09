@@ -31,12 +31,12 @@ typedef struct			s_cub
 	t_ch				verif[4];
 }						t_cub;
 
-typedef struct			s_sysCub
+typedef struct			s_sys_cub
 {
 	int					cur;
-	t_ch				nbVerif[3];
+	t_ch				nb_verif[3];
 	t_cub				lst[4];
-}						t_sysCub;
+}						t_sys_cub;
 
 typedef struct			s_tetri
 {
@@ -56,23 +56,23 @@ typedef struct			s_sys
 ** parsing.c
 */
 int						parse(t_sys *sys, int argc, char **argv);
-int						fillMap(t_sys *sys, char *str, int len);
-int						setTetri(t_sys *sys, char *str, int cur);
-void					buildTetri(t_sys *sys, t_sysCub *sysCub, char *str, int cur);
+int						fill_map(t_sys *sys, char *str, int len);
+int						set_tetri(t_sys *sys, char *str, int cur);
+void					build_tetri(t_sys *sys, t_sys_cub *sys_cub, char *str, int cur);
 int						ft_max(int a, int b);
-int						getStart(t_cub *lst);
-int						backVerif(t_sysCub *sysCub, int pos, int dir, char *str);
-void					initCubData(t_sysCub *sysCub, int dir, int posPrev, int *iCur);
-int						getCubIndexByPosi(t_sysCub *sysCub, int posi);
-int						getCurPosiByDir(int pos, int dir);
-int						verifChar(char *file);
-int						getNbTetri(int len);
+int						get_start(t_cub *lst);
+int						back_verif(t_sys_cub *sys_cub, int pos, int dir, char *str);
+void					init_cub_data(t_sys_cub *sys_cub, int dir, int pos_prev, int *i_cur);
+int						get_cub_index_by_posi(t_sys_cub *sys_cub, int posi);
+int						get_cur_posi_by_dir(int pos, int dir);
+int						verif_char(char *file);
+int						get_nb_tetri(int len);
 
 /*
 ** display.c
 */
 void					error();
-void					printAllPiece(t_sys *sys);
-void					printPiece(t_tetri *t);
+void					print_all_piece(t_sys *sys);
+void					print_piece(t_tetri *t);
 
 #endif

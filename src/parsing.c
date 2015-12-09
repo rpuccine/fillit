@@ -35,17 +35,17 @@ int			parse(t_sys *sys, int argc, char **argv)
 	if (ret < 0)
 		return (1);
 	buff[offset] = '\0';
-	if (fillMap(sys, buff, offset))
+	if (fill_map(sys, buff, offset))
 		return (1);
 	return (0);
 }
 
-int			fillMap(t_sys *sys, char *str, int len)
+int			fill_map(t_sys *sys, char *str, int len)
 {
 	int		i;
 	int		offset;
 
-	sys->nb_tetri = getNbTetri(len);
+	sys->nb_tetri = get_nb_tetri(len);
 	if (!(sys->lst_tetri =
 		(t_tetri *)malloc(sizeof(t_tetri) * sys->nb_tetri)))
 		return (1);
@@ -53,9 +53,9 @@ int			fillMap(t_sys *sys, char *str, int len)
 	i = 0;
 	while (i < sys->nb_tetri)
 	{
-		if (verifChar(str + offset))
+		if (verif_char(str + offset))
 			return (1);
-		if (setTetri(sys, str + offset, i))
+		if (set_tetri(sys, str + offset, i))
 			return (1);
 		offset += 20;
 		if (i < sys->nb_tetri - 1)
@@ -69,26 +69,26 @@ int			fillMap(t_sys *sys, char *str, int len)
 	return (0);
 }
 
-int			setTetri(t_sys *sys, char *str, int cur)
+int			set_tetri(t_sys *sys, char *str, int cur)
 {
-	t_sysCub	sysCub;
+	t_sys_cub	sys_cub;
 	int			i;
 	int			j;
 
-	ft_bzero((void*)&sysCub, sizeof(t_sysCub));
+	ft_bzero((void*)&sys_cub, sizeof(t_sys_cub));
 	i = 0;
 	while (i < 20)
 	{
 		if (str[i] == '#')
 		{
 			j = 0;
-			sysCub.lst[0].posi = i;
+			sys_cub.lst[0].posi = i;
 			while (j < 4)
 			{
-				sysCub.lst[0].verif[j] = TRUE;
-				if (!backVerif(&sysCub, i, j, str))
+				sys_cub.lst[0].verif[j] = TRUE;
+				if (!back_verif(&sys_cub, i, j, str))
 				{
-					buildTetri(sys, &sysCub, str, cur);
+					build_tetri(sys, &sys_cub, str, cur);
 					return (0);
 				}
 				j++;
@@ -100,7 +100,7 @@ int			setTetri(t_sys *sys, char *str, int cur)
 	return (1);
 }
 
-void		buildTetri(t_sys *sys, t_sysCub *sysCub, char *str, int cur)
+void		build_tetri(t_sys *sys, t_sys_cub *sys_cub, char *str, int cur)
 {
 	int		start;
 	int		i;
@@ -108,9 +108,9 @@ void		buildTetri(t_sys *sys, t_sysCub *sysCub, char *str, int cur)
 	t_tetri	*t;
 
 	t = sys->lst_tetri + cur;
-	t->x = ft_max(sysCub->nbVerif[0], sysCub->nbVerif[2]) + 1;
-	t->y = sysCub->nbVerif[1] + 1;
-	start = getStart(sysCub->lst);
+	t->x = ft_max(sys_cub->nb_verif[0], sys_cub->nb_verif[2]) + 1;
+	t->y = sys_cub->nb_verif[1] + 1;
+	start = get_start(sys_cub->lst);
 	printf("Start = %d\n", start);
 	t->in = (t_ch *)malloc(sizeof(t_ch) * (t->x * t->y));
 	i = 0;
@@ -133,7 +133,7 @@ int			ft_max(int a, int b)
 	return (b);
 }
 
-int			getStart(t_cub *lst)
+int			get_start(t_cub *lst)
 {
 	int		tmp;
 	int		start;
@@ -156,27 +156,27 @@ int			getStart(t_cub *lst)
 	return (lst[start].posi - (lst[start].y_r * 5));
 }
 
-int			backVerif(t_sysCub *sysCub, int posPrev, int dir, char *str)
+int			back_verif(t_sys_cub *sys_cub, int pos_prev, int dir, char *str)
 {
 	int		i;
-	int		iCur;
-	int		posCur;
+	int		i_cur;
+	int		pos_cur;
 
-	posCur = getCurPosiByDir(posPrev, dir);
-	if (str[posCur] != '#')
+	pos_cur = get_cur_posi_by_dir(pos_prev, dir);
+	if (str[pos_cur] != '#')
 		return (1);
-	sysCub->nbVerif[dir]++;
-	if ((iCur = getCubIndexByPosi(sysCub, posCur)) < 0)
-		initCubData(sysCub, dir, posPrev, &iCur);
-	if (sysCub->cur == 3)
+	sys_cub->nb_verif[dir]++;
+	if ((i_cur = get_cub_index_by_posi(sys_cub, pos_cur)) < 0)
+		init_cub_data(sys_cub, dir, pos_prev, &i_cur);
+	if (sys_cub->cur == 3)
 		return (0);
 	i = 0;
 	while (i < 4)
 	{
-		if (sysCub->lst[iCur].verif[i] == FALSE)
+		if (sys_cub->lst[i_cur].verif[i] == FALSE)
 		{
-			sysCub->lst[iCur].verif[i] = TRUE;
-			if (!backVerif(sysCub, posCur, i, str))
+			sys_cub->lst[i_cur].verif[i] = TRUE;
+			if (!back_verif(sys_cub, pos_cur, i, str))
 				return (0);
 		}
 		i++;
@@ -184,46 +184,46 @@ int			backVerif(t_sysCub *sysCub, int posPrev, int dir, char *str)
 	return (1);
 }
 
-void		initCubData(t_sysCub *sysCub, int dir, int posPrev, int *iCur)
+void		init_cub_data(t_sys_cub *sys_cub, int dir, int pos_prev, int *i_cur)
 {
-	int		iPrev;
+	int		i_prev;
 
-	sysCub->cur++;
-	*iCur = sysCub->cur;
-	sysCub->lst[*iCur].posi = getCurPosiByDir(posPrev, dir);
-	iPrev = getCubIndexByPosi(sysCub, posPrev);
+	sys_cub->cur++;
+	*i_cur = sys_cub->cur;
+	sys_cub->lst[*i_cur].posi = get_cur_posi_by_dir(pos_prev, dir);
+	i_prev = get_cub_index_by_posi(sys_cub, pos_prev);
 	if (dir == 0)
 	{
-		sysCub->lst[*iCur].x_r = sysCub->lst[iPrev].x_r + 1;
-		sysCub->lst[*iCur].y_r = sysCub->lst[iPrev].y_r;
+		sys_cub->lst[*i_cur].x_r = sys_cub->lst[i_prev].x_r + 1;
+		sys_cub->lst[*i_cur].y_r = sys_cub->lst[i_prev].y_r;
 	}
 	else if (dir == 1)
 	{
-		sysCub->lst[*iCur].x_r = sysCub->lst[iPrev].x_r;
-		sysCub->lst[*iCur].y_r = sysCub->lst[iPrev].y_r + 1;
+		sys_cub->lst[*i_cur].x_r = sys_cub->lst[i_prev].x_r;
+		sys_cub->lst[*i_cur].y_r = sys_cub->lst[i_prev].y_r + 1;
 	}
 	else if (dir == 2)
 	{
-		sysCub->lst[*iCur].x_r = sysCub->lst[iPrev].x_r - 1;
-		sysCub->lst[*iCur].y_r = sysCub->lst[iPrev].y_r;
+		sys_cub->lst[*i_cur].x_r = sys_cub->lst[i_prev].x_r - 1;
+		sys_cub->lst[*i_cur].y_r = sys_cub->lst[i_prev].y_r;
 	}
 }
 
-int			getCubIndexByPosi(t_sysCub *sysCub, int posi)
+int			get_cub_index_by_posi(t_sys_cub *sys_cub, int posi)
 {
 	int		i;
 
 	i = 0;
-	while (i < sysCub->cur)
+	while (i < sys_cub->cur)
 	{
-		if (sysCub->lst[i].posi == posi)
+		if (sys_cub->lst[i].posi == posi)
 			return (i);
 		i++;
 	}
 	return (-1);
 }
 
-int			getCurPosiByDir(int pos, int dir)
+int			get_cur_posi_by_dir(int pos, int dir)
 {
 	int		posi;
 
@@ -238,7 +238,7 @@ int			getCurPosiByDir(int pos, int dir)
 	return (posi);
 }
 
-int			verifChar(char *file)
+int			verif_char(char *file)
 {
 	int		i;
 	int		j;
@@ -266,7 +266,7 @@ int			verifChar(char *file)
 	return (0);
 }
 
-int			getNbTetri(int len)
+int			get_nb_tetri(int len)
 {
 	int nb_tetri;
 
