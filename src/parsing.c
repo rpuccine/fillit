@@ -156,61 +156,27 @@ int			getStart(t_cub *lst)
 	return (lst[start].posi - (lst[start].y_r * 5));
 }
 
-int			backVerif(t_sysCub *sysCub, int pos, int dir, char *str)
+int			backVerif(t_sysCub *sysCub, int posPrev, int dir, char *str)
 {
-	int		j;
 	int		i;
-	int		ret;
-	int		posi;
+	int		iCur;
+	int		posCur;
 
-	posi = getPosi(pos, dir);
-	if (str[posi] != '#')
+	posCur = getCurPosiByDir(posPrev, dir);
+	if (str[posCur] != '#')
 		return (1);
 	sysCub->nbVerif[dir]++;
-	j = 0;
-	ret = -1;
-	while (j <= sysCub->cur)
-	{
-		if (sysCub->lst[j].posi == posi)
-			ret = j;
-		j++;
-	}
-	if (ret < 0)
-	{
-		/*sysCub->cur++;
-		ret = sysCub->cur;
-		sysCub->lst[ret].posi = posi;
-		if (dir == 0)
-		{
-			sysCub->lst[ret].x_r = sysCub->lst[ret - 1].x_r + 1;
-			sysCub->lst[ret].y_r = sysCub->lst[ret - 1].y_r;
-		}
-		else if (dir == 1)
-		{
-			sysCub->lst[ret].x_r = sysCub->lst[ret - 1].x_r;
-			sysCub->lst[ret].y_r = sysCub->lst[ret - 1].y_r + 1;
-		}
-		else if (dir == 2)
-		{
-			sysCub->lst[ret].x_r = sysCub->lst[ret - 1].x_r - 1;
-			sysCub->lst[ret].y_r = sysCub->lst[ret - 1].y_r;
-		}
-		else
-			return (1);*/
-		sysCub->cur++;
-		sysCub->lst[sysCub->cur].posi = posi;
-		initCubData(sysCub, dir, pos);
-		ret = sysCub->cur;
-	}
+	if ((iCur = getCubIndexByPosi(sysCub, posCur)) < 0)
+		initCubData(sysCub, dir, posPrev, &iCur);
 	if (sysCub->cur == 3)
 		return (0);
 	i = 0;
 	while (i < 4)
 	{
-		if (sysCub->lst[ret].verif[i] == FALSE)
+		if (sysCub->lst[iCur].verif[i] == FALSE)
 		{
-			sysCub->lst[ret].verif[i] = TRUE;
-			if (!backVerif(sysCub, posi, i, str))
+			sysCub->lst[iCur].verif[i] = TRUE;
+			if (!backVerif(sysCub, posCur, i, str))
 				return (0);
 		}
 		i++;
@@ -218,27 +184,28 @@ int			backVerif(t_sysCub *sysCub, int pos, int dir, char *str)
 	return (1);
 }
 
-void		initCubData(t_sysCub *sysCub, int dir, int posPrev)
+void		initCubData(t_sysCub *sysCub, int dir, int posPrev, int *iCur)
 {
-	int		cur;
-	int		prev;
+	int		iPrev;
 
-	cur = sysCub->cur;
-	prev = getCubIndexByPosi(sysCub, posPrev);
+	sysCub->cur++;
+	*iCur = sysCub->cur;
+	sysCub->lst[*iCur].posi = getCurPosiByDir(posPrev, dir);
+	iPrev = getCubIndexByPosi(sysCub, posPrev);
 	if (dir == 0)
 	{
-		sysCub->lst[cur].x_r = sysCub->lst[prev].x_r + 1;
-		sysCub->lst[cur].y_r = sysCub->lst[prev].y_r;
+		sysCub->lst[*iCur].x_r = sysCub->lst[iPrev].x_r + 1;
+		sysCub->lst[*iCur].y_r = sysCub->lst[iPrev].y_r;
 	}
 	else if (dir == 1)
 	{
-		sysCub->lst[cur].x_r = sysCub->lst[prev].x_r;
-		sysCub->lst[cur].y_r = sysCub->lst[prev].y_r + 1;
+		sysCub->lst[*iCur].x_r = sysCub->lst[iPrev].x_r;
+		sysCub->lst[*iCur].y_r = sysCub->lst[iPrev].y_r + 1;
 	}
 	else if (dir == 2)
 	{
-		sysCub->lst[cur].x_r = sysCub->lst[prev].x_r - 1;
-		sysCub->lst[cur].y_r = sysCub->lst[prev].y_r;
+		sysCub->lst[*iCur].x_r = sysCub->lst[iPrev].x_r - 1;
+		sysCub->lst[*iCur].y_r = sysCub->lst[iPrev].y_r;
 	}
 }
 
@@ -256,7 +223,7 @@ int			getCubIndexByPosi(t_sysCub *sysCub, int posi)
 	return (-1);
 }
 
-int			getPosi(int pos, int dir)
+int			getCurPosiByDir(int pos, int dir)
 {
 	int		posi;
 

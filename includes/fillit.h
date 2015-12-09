@@ -62,9 +62,9 @@ void					buildTetri(t_sys *sys, t_sysCub *sysCub, char *str, int cur);
 int						ft_max(int a, int b);
 int						getStart(t_cub *lst);
 int						backVerif(t_sysCub *sysCub, int pos, int dir, char *str);
-void					initCubData(t_sysCub *sysCub, int dir, int posPrev);
+void					initCubData(t_sysCub *sysCub, int dir, int posPrev, int *iCur);
 int						getCubIndexByPosi(t_sysCub *sysCub, int posi);
-int						getPosi(int pos, int dir);
+int						getCurPosiByDir(int pos, int dir);
 int						verifChar(char *file);
 int						getNbTetri(int len);
 
