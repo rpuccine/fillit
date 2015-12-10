@@ -17,6 +17,27 @@ void	error(void)
 	ft_putendl("error");
 }
 
+void	debug_print_map(t_sys *sys)
+{
+	printf("------------------------------------\n");
+	printf("Size map : %d\n", sys->size_map);
+	printf("Nb placed : %d\n", sys->nb_placed);
+	print_map(sys->map, sys->size_map);
+	printf("------------------------------------\n");
+}
+
+void 	print_map(t_ch **map, int size)
+{
+  int   i;
+
+  i = -1;
+  while (++i < size)
+  {
+    write(1, (const char*)map[i], size);
+    ft_putendl("");
+  }
+}
+
 void	print_all_piece(t_sys *sys)
 {
 	int	i;

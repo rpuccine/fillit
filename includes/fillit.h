@@ -47,16 +47,25 @@ typedef struct			s_tetri
 {
 	int					x;
 	int					y;
+	int					is_placed;
+	int					placed_x;
+	int					placed_y;
+	int					old_size;
+	char				c;
 	unsigned char		*in;
 }						t_tetri;
 
 typedef struct			s_sys
 {
 	int					nb_tetri;
+	int					nb_placed;
 	int					area;
 	int					min_sqr;
 	t_tetri				*lst_tetri;
 	t_ch				**map;
+	int					size_map;
+	t_ch				**solved_map;
+	int					size_solved;
 
 }						t_sys;
 
@@ -87,21 +96,26 @@ int						get_nb_tetri(int len);
 ** display.c
 */
 void					error();
+void					debug_print_map(t_sys *sys);
+void 					print_map(t_ch **map, int size);
 void					print_all_piece(t_sys *sys);
 void					print_piece(t_tetri *t);
 
 /*
 ** solve.c
 */
-
-void    				place(unsigned char **map, t_tetri *piece, int x, int y);
-int   					do_recursion(t_sys *sys, t_square *sqr);
+int     				solve(t_sys *sys);
+int     				verif_soluce(t_sys *sys);
+void    				place_piece(t_sys *sys, t_tetri *t);
+int     				is_placable(t_sys *sys, t_tetri *piece, t_square *sqr);
+void    				place_in_map(t_sys *sys, t_tetri *piece, t_square *sqr);
+void  					unplace_piece(t_sys *sys, t_tetri *t);
 
 /*
 ** map.c
 */
 void 					init_map(t_sys *sys);
-void 					print_map(t_sys *sys);
 void   					set_min_sqr(t_sys *sys);
+t_ch  					**malloc_map(void);
 
 #endif

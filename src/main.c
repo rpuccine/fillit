@@ -23,7 +23,8 @@ int		main(int argc, char **argv)
 	}
 	init_map(&sys);
 	print_all_piece(&sys);
-	//print_map(&sys);
+	solve(&sys);
+	print_map(sys.solved_map, sys.size_solved);
 
 	return 0;
 }

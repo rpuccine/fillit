@@ -14,7 +14,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 INCLUDE_FOLDER = -Iincludes/ -Ilibft/includes/
 SRC_FOLDER = src/
-SRCS = main.c display.c parsing.c solve.c map.c
+SRCS = main.c display.c parsing.c map.c solve.c
 SRC = $(addprefix $(SRC_FOLDER), $(SRCS))
 OBJ = $(SRC:.c=.o)
 NAME = fillit
