@@ -12,29 +12,23 @@
 
 #include "fillit.h"
 
-int     solve(t_sys *sys)
+int     solve_first(t_sys *sys)
 {
   int   i;
 
   i = 0;
   while (i < sys->nb_tetri)
   {
-    if (sys->lst_tetri[i].is_placed == FALSE)
-    {
-      place_piece(sys, sys->lst_tetri + i);
-      if (sys->nb_placed == sys->nb_tetri)
-      {
-        if (verif_soluce(sys))
-          return (1);
-        unplace_piece(sys, sys->lst_tetri + i);
-        return (0);
-      }
-      if (solve(sys))
-        return (1);
-      unplace_piece(sys, sys->lst_tetri + i);
-    }
+    place_piece(sys, sys->lst_tetri + i);
     i++;
   }
+  if (verif_soluce(sys))
+    return (1);
+  sys->size_first = sys->size_map;
+  sys->size_map = 0;
+  free(sys->map);
+  sys->map = malloc_map();
+  sys->nb_placed = 0;
   return (0);
 }
 
@@ -64,6 +58,72 @@ int     verif_soluce(t_sys *sys)
   }
   return (0);
 } 
+
+int    place_piece_recurse(t_sys *sys, t_tetri *t)
+{
+  int       i;
+  int       j;
+  t_square  tmp;
+
+  i = 0;
+  while (i < sys->size_first)
+  {
+    j = 0;
+    while (j < sys->size_first)
+    {
+      tmp.x = j;
+      tmp.y = i;
+      tmp.size = -1;
+      if (is_placable_recurse(sys, t, &tmp) == TRUE)
+      {
+        place_in_map(sys, t, &tmp);
+        //debug_print_map(sys);
+        if (sys->nb_placed == sys->nb_tetri)
+        {
+          if (verif_soluce(sys))
+            return (1);
+          unplace_piece(sys, t);
+          return (0);
+        }
+        if (place_piece_recurse(sys, t + 1))
+          return (1);
+        unplace_piece(sys, t);
+      }
+      j++;
+    }
+    i++;
+  }
+  return (0);
+}
+
+int     is_placable_recurse(t_sys *sys, t_tetri *t, t_square *sqr)
+{
+  int   i;
+  int   j;
+  int   test_size;
+  t_ch  **map;
+
+  map = sys->map;
+  i = 0;
+  while (i < t->y)
+  {
+    j = 0;
+    while(j < t->x)
+    {
+      if (map[sqr->y + i][sqr->x + j] != '.'  && t->in[i * t->x + j] != '.')
+        return (FALSE);
+      j++;
+    }
+    i++;
+  }
+  if (sqr->x + t->x > sys->size_solved || sqr->y + t->y > sys->size_solved)
+    return (FALSE);
+  if ((test_size = ft_max(sqr->x + t->x, sqr->y + t->y)) > sys->size_map)
+    sqr->size = test_size;
+  else
+    sqr->size = sys->size_map;
+  return (TRUE);
+}
 
 void    place_piece(t_sys *sys, t_tetri *t)
 {
@@ -96,7 +156,7 @@ void    place_piece(t_sys *sys, t_tetri *t)
     i++;
   }
   place_in_map(sys, t, &ret);
-  debug_print_map(sys);
+  //debug_print_map(sys);
 }
 
 
@@ -124,12 +184,6 @@ int     is_placable(t_sys *sys, t_tetri *t, t_square *sqr)
     sqr->size = test_size;
   else
     sqr->size = sys->size_map;
-  /*if (sqr->x + t->x > sys->size_map)
-    sqr->size = sqr->x + t->x;
-  if (sqr->y + t->y > sys->size_map && sqr->y + t->y > sqr->size)
-    sqr->size = sqr->y + t->y;
-  if (sqr->size == -1)
-    sqr->size = sys->size_map;*/
   return (TRUE);
 }
 

@@ -66,6 +66,7 @@ typedef struct			s_sys
 	int					size_map;
 	t_ch				**solved_map;
 	int					size_solved;
+	int					size_first;
 
 }						t_sys;
 
@@ -104,12 +105,15 @@ void					print_piece(t_tetri *t);
 /*
 ** solve.c
 */
-int     				solve(t_sys *sys);
+int     				solve_first(t_sys *sys);
 int     				verif_soluce(t_sys *sys);
 void    				place_piece(t_sys *sys, t_tetri *t);
 int     				is_placable(t_sys *sys, t_tetri *piece, t_square *sqr);
 void    				place_in_map(t_sys *sys, t_tetri *piece, t_square *sqr);
 void  					unplace_piece(t_sys *sys, t_tetri *t);
+
+int	    				place_piece_recurse(t_sys *sys, t_tetri *t);
+int     				is_placable_recurse(t_sys *sys, t_tetri *t, t_square *sqr);
 
 /*
 ** map.c
