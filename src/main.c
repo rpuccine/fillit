@@ -25,5 +25,5 @@ int		main(int argc, char **argv)
 	solve_first(&sys);
 	place_piece_recurse(&sys, sys.lst_tetri);
 	print_map(sys.solved_map, sys.size_solved);
-	return 0;
+	return (0);
 }
