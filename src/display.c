@@ -14,66 +14,18 @@
 
 void	error(void)
 {
-	ft_putendl("error");
+	write(1, "error", 5);
+	write(1, "\n", 1);
 }
 
-void	debug_print_map(t_sys *sys)
-{
-	printf("------------------------------------\n");
-	printf("Size map : %d\n", sys->size_map);
-	printf("Nb placed : %d\n", sys->nb_placed);
-	print_map(sys->map, sys->size_map);
-	printf("------------------------------------\n");
-}
-
-void 	print_map(t_ch **map, int size)
-{
-  int   i;
-
-  i = -1;
-  while (++i < size)
-  {
-    write(1, (const char*)map[i], size);
-    ft_putendl("");
-  }
-}
-
-void	print_all_piece(t_sys *sys)
+void	print_map(t_ch **map, int size)
 {
 	int	i;
 
-	printf("Nb piece : %d\n", sys->nb_tetri);
-	printf("Area : %d\n", sys->area);
-	printf("Min_Sqr : %d\n", sys->min_sqr);
-	i = 0;
-	while (i < sys->nb_tetri)
+	i = -1;
+	while (++i < size)
 	{
-		print_piece(sys->lst_tetri + i);
-		i++;
+		write(1, (const char*)map[i], size);
+		write(1, "\n", 1);
 	}
-}
-
-void	print_piece(t_tetri *t)
-{
-	int	i;
-	int	j;
-	int	x;
-
-	i = 0;
-	x = 0;
-	printf("\n**** Piece x=%d y=%d *****\n", t->x, t->y);
-
-	while (i < t->y)
-	{
-		j = 0;
-		while (j < t->x)
-		{
-			printf("%c",t->in[x]);
-			x++;
-			j++;
-		}
-		printf("\n");
-		i++;
-	}
-	printf("****** End Piece ********\n");
 }

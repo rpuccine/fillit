@@ -12,31 +12,25 @@
 
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
-INCLUDE_FOLDER = -Iincludes/ -Ilibft/includes/
+INCLUDE_FOLDER = -Iincludes/
 SRC_FOLDER = src/
-SRCS = main.c display.c parsing.c map.c solve.c
+SRCS = main.c parsing.c parsing_2.c parsing_3.c display.c solve.c solve_specific.c map.c
 SRC = $(addprefix $(SRC_FOLDER), $(SRCS))
 OBJ = $(SRC:.c=.o)
 NAME = fillit
-LIB = -Llibft/ -lft
 
-all: libfte $(NAME)
+all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) -o $@ $(OBJ) $(LIB)
-
-libfte:
-	make -C libft/
+	$(CC) -o $@ $(OBJ)
 
 %.o: %.c
 	$(CC) -o $@ -c $<  $(CFLAGS) $(INCLUDE_FOLDER)
 
 clean:
-	make -C libft/ clean
 	rm -rf $(OBJ)
 
 fclean: clean
-	make -C libft/ s_fclean
 	rm -rf $(NAME)
 
 re: fclean all

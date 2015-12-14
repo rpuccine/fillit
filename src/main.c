@@ -22,13 +22,8 @@ int		main(int argc, char **argv)
 		return (0);
 	}
 	init_map(&sys);
-	print_all_piece(&sys);
 	solve_first(&sys);
-	ft_putendl("");
-	print_map(sys.solved_map, sys.size_solved);
 	place_piece_recurse(&sys, sys.lst_tetri);
-	ft_putendl("");
 	print_map(sys.solved_map, sys.size_solved);
-
 	return 0;
 }
