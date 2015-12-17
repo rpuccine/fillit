@@ -6,7 +6,7 @@
 /*   By: rpuccine <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/14 17:19:27 by rpuccine          #+#    #+#             */
-/*   Updated: 2015/12/14 17:19:29 by rpuccine         ###   ########.fr       */
+/*   Updated: 2015/12/17 15:38:02 by mravenel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,19 @@ int			get_nb_tetri(int len)
 
 	nb_tetri = len / 20;
 	if (nb_tetri >= 22)
+	{
 		nb_tetri--;
+		if (len % 20 != nb_tetri - 21)
+		{
+			error();
+			exit(-1);
+		}
+	}
+	else if (len % 20 != nb_tetri -1)
+	{
+		error();
+		exit(-1);
+	}
 	return (nb_tetri);
 }
 
